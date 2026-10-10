@@ -147,7 +147,7 @@ void inserirElemento()
 	int valor;
 	cout << "Digite o elemento: ";
 	cin >> valor;
-
+	
 	// -----------------------------------------------------------------
 	// TAREFA 1: antes de alocar memória, verifique se 'valor' já existe
 	// na lista (dica: use posicaoElemento). Se existir, avise o usuário
@@ -155,6 +155,12 @@ void inserirElemento()
 	// Como nada foi alocado até aqui, sair neste ponto NÃO causa
 	// vazamento de memória.
 	// -----------------------------------------------------------------
+
+	if (posicaoElemento(valor) != NULL)
+	{
+		cout << "O elemento ja existe na lista." << endl;
+		return;
+	}
 
 	// 2) ...e só depois alocamos memória para o novo nó
 	NO* novo = (NO*)malloc(sizeof(NO));
@@ -196,20 +202,60 @@ void excluirElemento()
 	// Lembre-se: todo nó removido precisa de free(), e um nó liberado
 	// nunca mais deve ser usado.
 	// -----------------------------------------------------------------
+	int valor;
+	cout << "Digite o elemento a ser excluido: ";
+	cin >> valor;
+
+	NO* elemento = posicaoElemento(valor);
+	if (elemento == NULL)
+	{
+		cout << "O elemento nao foi encontrado." << endl;
+		return;
+	}
+	NO* atual = primeiro;
+	NO* anterior = NULL;
+
+	while (atual != NULL && atual != elemento)
+	{
+		anterior = atual;
+		atual = atual->prox;
+	}
+
+	if (anterior == NULL)
+	{
+		primeiro = elemento->prox;
+	}
+	else
+	{
+		anterior->prox = elemento->prox;
+	}
+
+	free(elemento);
 }
 
 void buscarElemento()
 {
-	// -----------------------------------------------------------------
 	// TAREFA 2
 	// 1. Peça ao usuário o número a ser buscado.
 	// 2. Chame posicaoElemento(numero).
 	// 3. Retorno diferente de NULL -> exiba "ENCONTRADO"
 	//    Retorno igual a NULL     -> exiba "ELEMENTO NAO ENCONTRADO"
 	// -----------------------------------------------------------------
+
+	cout << "Digite o elemento a ser buscado: ";
+	int valor;
+	cin >> valor;
+
+	NO* resultado = posicaoElemento(valor);
+	if (resultado != NULL)
+	{
+		cout << "Elemento encontrado." << endl;
+	}
+	else
+	{
+		cout << "Elemento nao encontrado." << endl;
+	}
 }
-
-
 
 // retorna um ponteiro para o elemento buscado
 // ou NULL se o elemento não estiver na lista
